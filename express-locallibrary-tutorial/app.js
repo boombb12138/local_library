@@ -6,8 +6,20 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const catalogRouter = require("./routes/catalog")
 
 var app = express();
+
+// Set up mongoose connection
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+const mongoDB = "mongodb+srv://boombb:1696953205aw@cluster0.8x33y15.mongodb.net/local_library?retryWrites=true&w=majority&appName=Cluster0";
+
+main().catch((err) => console.log(err));
+async function main() {
+  await mongoose.connect(mongoDB);
+}
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));//akes Express serve all
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);//if the imported users module defines a route for /profile, you would access that route at /users/profile
+app.use("/catalog",catalogRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
